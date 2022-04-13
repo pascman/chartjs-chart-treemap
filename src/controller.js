@@ -151,9 +151,31 @@ function drawLabels(ctx, item, rect) {
     ctx.textAlign = labelsOpts.align;
     ctx.textBaseline = labelsOpts.position;
     ctx.fillStyle = optColor;
-    labels.forEach((l, i) => ctx.fillText(l, xyPoint.x, xyPoint.y + i * lh));
+    labels.forEach((l, i) => {
+      const lines = l.split('\n');
+      lines.forEach((ll, ii)=> {
+        const str = fittingString(ctx, ll, rect.width - labelsOpts.padding * 2);
+        ctx.fillText(str, xyPoint.x, xyPoint.y + i * lh + (lh * ii));
+      });
+    });
   }
 }
+
+function fittingString(c, str, maxWidth) {
+  var width = c.measureText(str).width;
+  var ellipsis = '…';
+  var ellipsisWidth = c.measureText(ellipsis).width;
+  if (width <= maxWidth || width <= ellipsisWidth) {
+    return str;
+  }
+  var len = str.length;
+  while (width >= maxWidth - ellipsisWidth && len-- > 0) {
+    str = str.substring(0, len);
+    width = c.measureText(str).width;
+  }
+  return str + ellipsis;
+}
+
 
 function calculateXYLabel(options, rect, labels, lineHeight) {
   const labelsOpts = options.labels;

@@ -94,12 +94,20 @@ export default class TreemapElement extends Element {
       ctx.rect(outer.x, outer.y, outer.w, outer.h);
       ctx.clip();
       ctx.rect(inner.x, inner.y, inner.w, inner.h);
-      ctx.fillStyle = options.backgroundColor;
+      if (this.$context.dataset.tree[this.$context.dataIndex].color) {
+        ctx.fillStyle = options.backgroundColor = this.$context.dataset.tree[this.$context.dataIndex].color;
+      } else {
+        ctx.fillStyle = options.backgroundColor;
+      }
       ctx.fill();
       ctx.fillStyle = options.borderColor;
       ctx.fill('evenodd');
     } else {
-      ctx.fillStyle = options.backgroundColor;
+      if (this.$context.dataset.tree[this.$context.dataIndex].color) {
+        ctx.fillStyle = options.backgroundColor = this.$context.dataset.tree[this.$context.dataIndex].color;
+      } else {
+        ctx.fillStyle = options.backgroundColor;
+      }
       ctx.fillRect(inner.x, inner.y, inner.w, inner.h);
     }
     ctx.restore();
